@@ -1,1 +1,89 @@
-.B How tga file work
+.TH Tga Reader "March 26, 2019"
+.SH NAME :
+Tga Reader - @42
+
+.SH Description
+"C program reading a tga file and parse to get a ARGB32 string"
+
+.SH Requirement :
+.nf
+include :
+		libft.a
+		stdlib.h
+		Tga_reader.h
+
+src		:
+		createpxl.c
+		data.c
+		filldata.c
+		rot.c
+		tga_main.c
+		uncompress.c
+.fi
+.SH How the Reader work ?
+.nf
+"Read 18 Bytes (The Header of the file)"
+.IFill a struct for each value get in the Header
+"Read len character of the  Color map"
+"Read info of the file (Not used but stocked if needed)"
+"Read the Data size (exept if the file is compress, we read everything)"
+Interpret the data to fill an "Unsigned int*"
+.fi
+
+.SH How Run-length works ?
+.nf
+/!\\ Don't forget the tga file is on Big Endian /!\\
+
+Example 32 bits :
+	[ rle | value][BBBBBBB][GGGGGGGG][RRRRRRRR][AAAAAAAA]
+
+The first bit show if the rle compress is actif for len pixel
+	[1 0000110] & 0x80 ([1 0000000]) => 127 if the first bit is on else return 0
+
+For get the len of pixel compressed
+	[1 0000110] & 0x7F ([0 1111111]) => return a value beetween 0 and 126
+
+The compression can't be 0 so we add 1 to knew the real len of the compression
+
+If the compression is actif for len pixel we will repeat the next value (depth of the pics)
+.fi
+.SH How the color is fill in other depth ?
+.nf
+24 bits :
+	[BBBBBBBB][GGGGGGGG][RRRRRRRR]	=> (Can't have alpha)
+
+15/16 bits :
+	[GGGBBBBB][ARRRRRGG]			=> (A is enable for 16 bits else is not used)
+
+8 bits :
+	[VALUE]						=> (Fill [R G B] in same time)
+.fi
+.SH Technical details
+.nf
+Header :
+	Byte[0] = info_length
+	Byte[1] = Data_Type
+	Byte[2] = Type of compression (1, 2 ,3 ,9 ,10 ,11)
+	Byte[3] / Byte[4] = Index of the color map in the file
+	Byte[5] / Byte[6] = Lenght of the color map
+	Byte[7] = Bits per pixel of the Color map
+	Byte[8] / Byte[9] = XOrigin of the Pictures
+	Byte[10] / Byte[11] = YOrigin of the Pictures
+	Byte[12] / Byte[13] = Width
+	Byte[14] / Byte[15] = Height
+	Byte[16] = Bits per pixel of the Data
+	Byte[17] = Descriptor
+
+Signature : (Only on V2 file)
+	Byte[0] => Byte[3] = Extension offset
+	Byte[4] => Byte[7] = Developer offset
+	Byte[8] => Byte[24] = "TRUEVISION-XFILE"
+	Byte[25] = "."
+	Byte[26] = NULL (EOF)
+
+.fi
+.SH AUTHOR
+.nf
+Jsauron - 2019 - jsauron@student.42.fr
+Lomasse - 2019 - lomasse@student.42.fr
+.fi
