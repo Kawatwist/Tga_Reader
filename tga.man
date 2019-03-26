@@ -1,0 +1,1 @@
+.B How tga file work
