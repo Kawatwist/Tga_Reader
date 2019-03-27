@@ -6,7 +6,7 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 13:54:50 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/25 15:32:19 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 15:24:23 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,18 @@
 # define TGA_READER_H
 
 # include "../libft/libft.h"
-# include "../libui/SDL2/SDL.h"
+# include "../includes/SDL2/SDL.h"
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <stdlib.h>
 
 typedef struct		s_tga
 {
-	unsigned char	*cm;			// DONE
-	unsigned char	*data;			// DONE
-	unsigned char	*done;			// DONE
+	unsigned char	*cm;
+	unsigned char	*data;
 	unsigned char	*info;
-	int				id_len;			// =>
+	unsigned char	*done;
+	int				id_len;
 	int				datatype;
 	int				compress;
 	int				cm_start;
@@ -35,7 +36,7 @@ typedef struct		s_tga
 	int				w;
 	int				h;
 	int				data_bpp;
-	int				descriptor;		// <=
+	int				descriptor;
 	int				data_len;
 	int				fd;
 	int				data_i;
@@ -56,6 +57,7 @@ int				getdata(t_tga *tga);
 int				getfile(t_tga *tga, const char *path);
 void			*cleartga(t_tga *tga);
 int				inittga(t_tga *tga);
+void			*free_tga(t_tga *tga);
 t_tga			*load_tga(const char *path);
 
 #endif

@@ -6,11 +6,11 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 17:22:10 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/26 18:23:37 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 15:13:03 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/tga_reader.h"
+#include "../includes/tga_reader.h"
 
 unsigned char	*runlengthcm(t_tga *tga, unsigned char *new)
 {
@@ -71,14 +71,12 @@ unsigned char	*runlength(t_tga *tga, unsigned char *new)
 			while (again)
 			{
 				fill(tga, tga->data, new, tga->data_bpp);
-//				printf("%d, %d, %d, %d\n", new[tga->new_i], new[tga->new_i + 1], new[tga->new_i + 2], new[tga->new_i + 3]);
 				tga->new_i += 4;
 				tga->data_i += (tga->data_bpp >> 3);
 				again--;
 			}
 		}
 	}
-	printf("%d\t\t=>%d\n", tga->new_i, tga->w * tga->h * 4);
 	return (new);
 }
 
@@ -86,8 +84,6 @@ int				uncompress(t_tga *tga)
 {
 	unsigned char	*ret;
 
-	printf("Compressed File\n");
-	printf("Compressed value : %d\n", tga->compress);
 	ret = NULL;
 	if ((ret = (unsigned char *)malloc(sizeof(unsigned char) * tga->w * tga->h * 4)) == NULL)
 		return (1);
@@ -103,6 +99,5 @@ int				uncompress(t_tga *tga)
 	}
 	free(tga->data);
 	tga->data = ret;
-	printf("Compressed Finished\n");
 	return (0);
 }

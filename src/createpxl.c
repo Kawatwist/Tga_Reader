@@ -6,11 +6,11 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 18:18:07 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/26 17:47:03 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 15:11:45 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/tga_reader.h"
+#include "../includes/tga_reader.h"
 
 unsigned char *pxlbasecm(t_tga *tga, unsigned char *new)
 {
@@ -46,7 +46,6 @@ int			createpxl(t_tga *tga)
 {
 	unsigned char *ret;
 
-	printf("File not compressed %d\n", tga->compress);
 	tga->truevision = ft_strcmp((const char *)&tga->data[(tga->w * tga->h * (tga->data_bpp >> 3)) - 18], "TRUEVISION-XFILE.");
 	if ((ret = (unsigned char *)malloc(sizeof(unsigned char) * tga->w * tga->h * 4)) == NULL)
 		return (1);

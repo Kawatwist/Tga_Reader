@@ -6,11 +6,11 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 18:08:00 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/26 11:57:35 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 14:25:46 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/tga_reader.h"
+#include "../includes/tga_reader.h"
 
 void	sym_vert(t_tga *tga)
 {
