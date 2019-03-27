@@ -125,7 +125,8 @@ int		main(int argc, char **argv)
 {
 	SDL_Window	*window;
 	SDL_Surface	*surface;
-	SDL_Surface	*tmp;
+	SDL_Texture	*texture;
+	SDL_Renderer *rend;
 	t_tga		*tga;
 	
 	if (argc < 2)
@@ -133,17 +134,16 @@ int		main(int argc, char **argv)
 	if ((tga = load_texture(argv[1])) == NULL || tga->data == NULL)
 		return (0);
 	SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_CreateWindow(window);
-	tmp = SDL_GetWindowSurface(window);
+	window = SDL_CreateWindow("Tga", 0, 0, 800, 600, SDL_WINDOW_SHOWN);
+	rend = SDL_CreateRenderer(window, -1, SDL_Renderer_ACCELERATED);
 	surface = SDL_CreateRGBSurfaceWithFormatFrom(tga->data, tga->w, tga->h, 32, tga->w * 4, SDL_PIXELFORMAT_ARGB32);
-	SDL_BlitSurface(surface, NULL, tmp, NULL);
+	textue = SDL_CreateTextureFromSurface(rend, surface);
+	SDL_RenderCopy(rend, texture, NULL, NULL);
+	SDL_RenderPresent(rend);
 	SDL_UpdateWindowSurface(window);
-	SDL_Delay(10000);
-	free(tga->data);
-	tga->cm != NULL ? free(tga->cm) : 0;
-	tga->info != NULL ? free(tga->info) : 0;
-	tga->done != NULL ? free(tga->done) : 0;
-	free(tga);
+	SDL_Delay(1000);
+	free_tga(tga);
+	SDL_DestroyTexture(texture);
 	SDL_FreeSurface(surface);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
