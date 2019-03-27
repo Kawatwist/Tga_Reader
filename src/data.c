@@ -6,7 +6,7 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 16:37:58 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/27 16:14:57 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 16:51:33 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ int		getcm(t_tga *tga)
 {
 	if (tga->cm_len != 0)
 	{
-		if ((tga->cm = (unsigned char *)malloc(sizeof(unsigned char) * (tga->cm_len * tga->cm_bpp >> 3))) == NULL)
+		if ((tga->cm = (unsigned char *)malloc(sizeof(unsigned char)
+						* (tga->cm_len * tga->cm_bpp >> 3))) == NULL)
 			return (1);
-		if (read(tga->fd, tga->cm, tga->cm_len * (tga->cm_bpp >> 3)) != tga->cm_len * (tga->cm_bpp >> 3))
+		if (read(tga->fd, tga->cm, tga->cm_len * (tga->cm_bpp >> 3))
+				!= tga->cm_len * (tga->cm_bpp >> 3))
 			return (1);
 	}
 	return (0);
@@ -49,7 +51,8 @@ int		getinfo(t_tga *tga)
 {
 	if (tga->id_len != 0)
 	{
-		if ((tga->info = (unsigned char *)malloc(sizeof(unsigned char) * tga->id_len)) == NULL)
+		if ((tga->info = (unsigned char *)malloc(sizeof(unsigned char)
+						* tga->id_len)) == NULL)
 			return (1);
 		if (read(tga->fd, tga->info, tga->id_len) != tga->id_len)
 			return (1);
@@ -59,11 +62,14 @@ int		getinfo(t_tga *tga)
 
 int		getdata(t_tga *tga)
 {
-	if ((tga->data = (unsigned char *)malloc(sizeof(unsigned char) * tga->w * tga->h * ((tga->data_bpp >> 3) + (tga->compress > 8 ? 1 : 0)))) == NULL)
+	if ((tga->data = (unsigned char *)malloc(sizeof(unsigned char)
+					* tga->w * tga->h * ((tga->data_bpp >> 3)
+						+ (tga->compress > 8 ? 1 : 0)))) == NULL)
 		return (1);
 	if (tga->compress < 8)
 	{
-		if (read(tga->fd, tga->data, tga->w * tga->h * ((tga->data_bpp >> 3))) != (tga->w * tga->h * ((tga->data_bpp >> 3))))
+		if (read(tga->fd, tga->data, tga->w * tga->h * (tga->data_bpp >> 3))
+				!= (tga->w * tga->h * ((tga->data_bpp >> 3))))
 			return (1);
 	}
 	else
@@ -73,10 +79,10 @@ int		getdata(t_tga *tga)
 
 int		getfile(t_tga *tga, const char *path)
 {
-
 	if (((tga->fd = open(path, O_RDONLY)) == -1))
 		return (1);
-	if (getheader(tga) || getinfo(tga) == 1 || getcm(tga) == 1 || getdata(tga) == 1)
+	if (getheader(tga) || getinfo(tga) == 1
+			|| getcm(tga) == 1 || getdata(tga) == 1)
 	{
 		ft_putstr("Parsing Header Failed\n");
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 16:26:36 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/27 16:15:21 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 16:47:22 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int			inittga(t_tga *tga)
 	tga->fd = 0;
 	tga->data_i = 0;
 	tga->new_i = 0;
-	tga->truevision = 0;
 	return (0);
 }
 

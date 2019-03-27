@@ -6,7 +6,7 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 13:54:50 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/27 15:24:23 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 16:46:57 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef struct		s_tga
 	int				fd;
 	int				data_i;
 	int				new_i;
-	int				truevision;
 }					t_tga;
 
 void			sym_vert(t_tga *tga);

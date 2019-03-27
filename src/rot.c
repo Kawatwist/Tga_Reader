@@ -6,35 +6,42 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/13 18:08:00 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/27 14:25:46 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 17:02:27 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/tga_reader.h"
 
-void	sym_vert(t_tga *tga)
+static void		swap_bytes(t_tga *tga, unsigned char *new, int i, int j)
 {
-	int		j;
-	int		i;
-	int 	nb;
+	new[j + (i * tga->w * 4)] = tga->data[(i * tga->w * 4)
+		+ ((tga->w * 4) - j)];
+	new[j + (i * tga->w * 4) + 1] = tga->data[(i * tga->w * 4)
+		+ ((tga->w * 4) - j) - 3];
+	new[j + (i * tga->w * 4) + 2] = tga->data[(i * tga->w * 4)
+		+ ((tga->w * 4) - j) - 2];
+	new[j + (i * tga->w * 4) + 3] = tga->data[(i * tga->w * 4)
+		+ ((tga->w * 4) - j) - 1];
+}
+
+void			sym_vert(t_tga *tga)
+{
+	int				j;
+	int				i;
 	unsigned char	*done;
 
-	j  = 0;
+	j = 0;
 	i = 0;
-	nb = 0;
-	if ((done = (unsigned char *)malloc(sizeof(unsigned char) * tga->w * tga->h * 4)) == NULL)
+	if ((done = (unsigned char *)malloc(sizeof(unsigned char)
+					* tga->w * tga->h * 4)) == NULL)
 		return ;
 	while (i < tga->h)
 	{
 		j = 0;
 		while (j < tga->w * 4)
 		{
-			done[j + (i * tga->w * 4)] = tga->data[(i * tga->w * 4) + ((tga->w * 4) - j)];
-			done[j + (i * tga->w * 4) + 1] = tga->data[(i * tga->w * 4) + ((tga->w * 4) - j) - 3];
-			done[j + (i * tga->w * 4) + 2] = tga->data[(i * tga->w * 4) + ((tga->w * 4) - j) - 2];
-			done[j + (i * tga->w * 4) + 3] = tga->data[(i * tga->w * 4) + ((tga->w * 4) - j) - 1];
+			swap_bytes(tga, done, i, j);
 			j += 4;
-			nb += 4;
 		}
 		i += 1;
 	}
@@ -42,7 +49,7 @@ void	sym_vert(t_tga *tga)
 	tga->data = done;
 }
 
-void	rotatepxl(t_tga *tga)
+void			rotatepxl(t_tga *tga)
 {
 	int				i;
 	int				nb;
@@ -50,7 +57,8 @@ void	rotatepxl(t_tga *tga)
 
 	nb = 0;
 	i = 0;
-	if ((done = (unsigned char *)malloc(sizeof(unsigned char) * tga->w * tga->h * 4)) == NULL)
+	if ((done = (unsigned char *)malloc(sizeof(unsigned char)
+					* tga->w * tga->h * 4)) == NULL)
 		return ;
 	while (i <= (tga->w * tga->h * 4))
 	{
