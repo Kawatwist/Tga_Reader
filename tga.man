@@ -2,10 +2,22 @@
 .SH NAME :
 Tga Reader - @42
 
-.SH Description
+.SH DESCRIPTION
 "C program reading a tga file and parse to get a ARGB32 string"
 
-.SH Requirement :
+.SH SYNOPSIS
+.I t_tga		
+*load_tga(
+.B const char 
+*path
+);
+
+.I void			*
+free_tga(
+.B t_tga *tga
+);
+
+.SH REQUIREMENT :
 .nf
 include :
 		libft.a
@@ -30,9 +42,30 @@ src		:
 Interpret the data to fill an "Unsigned int*"
 .fi
 
+.SH How the struct is filled ?
+.B The tga's struct is splited in 3 parts :
+.nf
+	1. "Unsigned char *"	They are the data get in the file (and convert for "data")
+	2. "Int"				id_len => data_len They are the information parse in the Header's file
+	3. "Int"				Every other variable are only for the program
+.fi
+.SH How the data are filled ?
+.B The data at the end of the program are stocked in the "Unsigned char *data"
+
+They are stock with a Bits per pixel of 32 in
+.I Big Endian
+.nf
+	[Alpha][Red][Green][Blue] * Width * Hight of the pics
+	Also with a 8 Bpp we fill the alpha parts of the string with [255]
+	see (the conversion of the basic string is in this file : filldata.c or uncompress.c if the compression is >= 9)
+.fi
+.SH How to know the len of the strings / the width / ...
+Everythings is filled in the struct in data.c
+Read the
+.I Thechnical details...
 .SH How Run-length works ?
 .nf
-/!\\ Don't forget the tga file is on Big Endian /!\\
+/!\\ Don't forget the tga file is on Little Endian /!\\
 
 Example 32 bits :
 	[ rle | value][BBBBBBB][GGGGGGGG][RRRRRRRR][AAAAAAAA]
@@ -44,7 +77,6 @@ For get the len of pixel compressed
 	[1 0000110] & 0x7F ([0 1111111]) => return a value beetween 0 and 126
 
 The compression can't be 0 so we add 1 to knew the real len of the compression
-
 If the compression is actif for len pixel we will repeat the next value (depth of the pics)
 .fi
 .SH How the color is fill in other depth ?
@@ -81,7 +113,44 @@ Signature : (Only on V2 file)
 	Byte[25] = "."
 	Byte[26] = NULL (EOF)
 
+	For the developper area it can change
 .fi
+.SH EXAMPLE WITH SDL
+.SH ====================================================================================================================
+.nf
+#include "tga_reader.h"
+#include "SDL2/SDL.H"
+
+int		main(int argc, char **argv)
+{
+	SDL_Window	*window;
+	SDL_Surface	*surface;
+	SDL_Surface	*tmp;
+	t_tga		*tga;
+	
+	if (argc < 2)
+		return (0);
+	if ((tga = load_texture(argv[1])) == NULL || tga->data == NULL)
+		return (0);
+	SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_CreateWindow(window);
+	tmp = SDL_GetWindowSurface(window);
+	surface = SDL_CreateRGBSurfaceWithFormatFrom(tga->data, tga->w, tga->h, 32, tga->w * 4, SDL_PIXELFORMAT_ARGB32);
+	SDL_BlitSurface(surface, NULL, tmp, NULL);
+	SDL_UpdateWindowSurface(window);
+	SDL_Delay(10000);
+	free(tga->data);
+	tga->cm != NULL ? free(tga->cm) : 0;
+	tga->info != NULL ? free(tga->info) : 0;
+	tga->done != NULL ? free(tga->done) : 0;
+	free(tga);
+	SDL_FreeSurface(surface);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+	return (0);
+}
+.fi
+.SH ====================================================================================================================
 .SH AUTHOR
 .nf
 Jsauron - 2019 - jsauron@student.42.fr
