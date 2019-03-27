@@ -6,7 +6,7 @@
 /*   By: lomasse <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/24 16:26:36 by lomasse           #+#    #+#             */
-/*   Updated: 2019/03/27 15:23:12 by lomasse          ###   ########.fr       */
+/*   Updated: 2019/03/27 16:15:21 by lomasse          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ void		*free_tga(t_tga *tga)
 {
 	if (tga != NULL)
 	{
-		tga->data != NULL ? free(tga->cm) : 0;
+		tga->data != NULL ? free(tga->data) : 0;
 		tga->cm != NULL ? free(tga->cm) : 0;
-		tga->info != NULL ? free(tga->cm) : 0;
-		tga->done != NULL ? free(tga->cm) : 0;
+		tga->info != NULL ? free(tga->info) : 0;
+		tga->done != NULL ? free(tga->done) : 0;
 	}
 	return (NULL);
 }
